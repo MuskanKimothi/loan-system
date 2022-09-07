@@ -1,0 +1,257 @@
+
+
+CREATE TABLE Borrower (      
+Borrower_id INT,    
+First_name VARCHAR(50) NOT NULL,  
+Last_name VARCHAR(50) NOT NULL,
+Pan_number VARCHAR(100) NOT NULL, 
+Address VARCHAR(255) NOT NULL,
+Contact_number BIGINT NOT NULL,  
+Email VARCHAR(80) NOT NULL,
+Constraint
+Borrower_Borrower_id_pk Primary Key(Borrower_id)
+)
+
+
+
+
+
+
+INSERT INTO Borrower VALUES ('101',  'Muskan','Kimothi','HHCPK6867','Vasant Kunj, Delhi', 987654321, 'muskan@gmail.com')
+INSERT INTO Borrower VALUES ( '102', 'Shakshi','Kimothi','HGCPK4567','Chattarpur, Delhi', 887658770, 'shakshi@gmail.com')
+INSERT INTO Borrower VALUES  ('201', 'Rahul','Yadav','HHCPI4567','Gurugram, Harayana', 9988776655, 'rahul@gmail.com')
+INSERT INTO Borrower VALUES ( '103', 'Nikita','Yadav','HHC98567','Dwarka, Delhi', 8844332211, 'nikita@gmail.com')
+INSERT INTO Borrower VALUES ( '104', 'Anshu','Yadav','HHCPK0967','Yamunanagar, Harayana', 8844332211, 'anshu@gmail.com')
+INSERT INTO Borrower VALUES ( '105', 'Era','Yadav','GHCPK4567','Rewari, Harayana', 8844332211, 'era@gmail.com')
+INSERT INTO Borrower VALUES ( '106', 'Meghana','Sharma','BHCPK4567','Dwarka, Delhi',9744332211, 'meghana@gmail.com')
+INSERT INTO Borrower VALUES ( '107', 'Rashika','Gussain','AHCPK4567','Mehrauli, Delhi', 98332211, 'rashika@gmail.com')
+INSERT INTO Borrower VALUES ( '108', 'Mansi','Gussain','KYCPK4567','Mahipalpur, Delhi', 985432211, 'mansi@gmail.com')
+INSERT INTO Borrower VALUES ( '109', 'Mohit','Kimothi','HKCPK4567','Mstreet, Mubai', 887658770, 'mohit@gmail.com')
+
+
+
+SELECT * FROM Borrower
+
+
+
+
+CREATE TABLE Loan(   
+Loan_number INT Primary key, 
+Borrower_id INT NOT NULL,
+Loan_status VARCHAR(30) NOT NULL,   
+Duration INT NOT NULL,  
+Loan_purpose VARCHAR(255) NOT NULL,
+Amount DECIMAL(10) NOT NULL,
+Loan_Type INT NOT NULL
+)
+
+
+ALTER TABLE Loan ADD FOREIGN KEY (Borrower_id) REFERENCES Borrower(Borrower_id)
+ALTER TABLE Loan ADD FOREIGN KEY (Loan_type) REFERENCES Loan_type(Loan_type)
+
+
+
+
+INSERT INTO Loan VALUES (1,'101', 'Active', 3, 'Home', 4000000,1)
+INSERT INTO Loan VALUES (2,'102', 'Inactive', 5, 'Starting bakery', 900000.0,2)
+INSERT INTO Loan VALUES (3, '201','Active', 8, 'Abroad for education', 2000000,3)
+INSERT INTO Loan VALUES (4, '103','Active', 2, 'Need to rebuild due to earthquake', 300000, 4)
+INSERT INTO Loan VALUES (5, '104','Active', 2, 'Home', 400000, 1)
+INSERT INTO Loan VALUES (6, '105','Active', 2, 'Student loan', 100000, 3)
+INSERT INTO Loan VALUES (7,'106', 'Inactive', 2, 'Buying SUV Car ', 300000, 8)
+INSERT INTO Loan VALUES (8,'107', 'Active', 2, 'Startup', 600000, 2)
+INSERT INTO Loan VALUES (9,'108', 'Active', 2, 'Purchase of agricultural tools', 800000, 10)
+INSERT INTO Loan VALUES (10,'109', 'Inactive', 2, 'Building Clothing store', 900000, 2)
+
+
+
+
+
+SELECT * FROM Loan
+
+
+
+
+
+CREATE TABLE Loan_type (  
+
+Loan_type INT Primary key,
+Loan_type_name VARCHAR(50) NOT NULL,
+)
+
+
+
+INSERT INTO Loan_type values (1, 'Home')
+INSERT INTO Loan_type values (2, 'Business')
+INSERT INTO Loan_type values (3, 'Education')
+INSERT INTO Loan_type values (4, 'Calamity')
+INSERT INTO Loan_type values (5, 'Personal')
+INSERT INTO Loan_type values (6,'Home Equity Loan')
+INSERT INTO Loan_type values (7, 'Construction')
+INSERT INTO Loan_type values (8, 'Car Finance Loan')
+INSERT INTO Loan_type values (9,'Secured Loan')
+INSERT INTO Loan_type values (10,'Agriculture loan')
+
+
+
+
+
+
+SELECT * FROM Loan_type
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>Procedure for borrower table
+
+Create procedure Proc_borrower
+As
+Begin
+  Declare @V_firstname varchar(30)
+  Declare @V_lastname varchar(30)
+  Declare @V_address varchar(30)
+  Declare Cur_borrower Cursor For Select firstname, lastname, address  from borrower
+  open Cur_borrower
+  Fetch Next from Cur_borrower into @V_firstname, @V_lastname, @V_address
+  while(@@FETCH_STATUS = 0)
+  Begin
+    Print 'FirstName: ' + @V_firstname + ' LastName: ' + @V_lastname + ' Address: ' + @V_address
+    Fetch Next from Cur_employee into @V_firstname, @V_lastname,@V_address
+  End
+  close Cur_borrower
+  DeAllocate Cur_borrower
+End
+
+Alter procedure Proc_borrower
+
+@vuserid varchar(6)
+
+As
+
+Begin
+
+ Declare @V_firstname varchar(30)
+  Declare @V_lastname varchar(30)
+  Declare @V_address varchar(30)
+
+  Declare Cur_borrower Cursor For Select firstname, lastname, address  from borrower Where userid = @vuserid
+
+  open Cur_borrower
+
+  Fetch Next from Cur_borrower into @V_firstname, @V_lastname, @V_address
+
+  while(@@FETCH_STATUS = 0)
+
+  Begin
+
+    Print 'FirstName: ' + @V_firstname + ' LastName: ' + @V_lastname  + ' Address: ' + @V_address
+
+    Fetch Next from Cur_borrower into @V_firstname, @V_lastname, @V_address
+
+  End
+
+  close Cur_borrower
+
+  DeAllocate Cur_borrower
+End
+
+Exec Proc_borrower '101'
+
+
+
+Alter procedure Proc_borrower
+@vuserid int,
+@V_firstname varchar(30),
+@V_lastname varchar(30),
+@V_address varchar(30),
+@V_contact bigint,  
+@V_email varchar(255)
+
+As
+Begin
+  Insert into borrower values(@vuserid, @V_firstname, @V_lastname,@V_address,@V_contact,@V_email)
+End
+
+
+Exec Proc_borrower '111', 'Mansi' , 'Sharma', 'Amritsar,Punjab', '8826637546', 'mansi@gmail.com'
+
+
+Exec Proc_borrower '108', 'Mansi' , 'Gussain', 'Amritsar,Punjab', '8826637546', 'mansi@gmail.com'
+
+
+
+>>>>>>Procedure for loan table
+
+Create procedure Proc_loan
+As
+Begin
+  Declare @V_loan_number int
+   Declare @V_loan_status varchar(30)
+    Declare @V_duration int
+  Declare @V_amount decimal(30)
+  Declare @V_purpose varchar(30)
+  Declare @V_type varchar(30)
+  Declare Cur_loan Cursor For Select loan_number, loan_status, duration, purpose, amount, type  from loan
+  open Cur_loan
+  Fetch Next from Cur_loan into @V_loan_number, @V_loan_status, @V_duration, @V_amount, @V_purpose, @V_type 
+  while(@@FETCH_STATUS = 0)
+  Begin
+    Print 'LoanNo: ' + @V_loan_number + ' LoanStatus: ' + @V_loan_status + ' Purpose: ' + @V_purpose
+    Fetch Next from Cur_employee into @V_loan_number, @V_loan_status, @V_purpose
+  End
+  close Cur_loan
+  DeAllocate Cur_loan
+End
+
+
+Alter procedure Proc_loan
+@V_loan_number int,
+@V_userid int,
+  @V_loan_status varchar(30),
+ @V_duration int,
+ @V_purpose varchar(30),
+ @V_amount decimal(30),
+ @V_type varchar(30)
+
+As
+Begin
+  Insert into loan values(@V_loan_number,@V_userid, @V_loan_status, @V_duration,@V_purpose,@V_amount,@V_type)
+End
+
+Exec Proc_loan '11', '101', 'Active' , '6', 'Personal', '6000000',  'Personal'
+
+Select * from loan
+
+
+
+
+>>>>View for both tables:
+
+View for borrower table----
+Create View V_borrower as Select * from borrower
+
+Select * from V_borrower
+
+Select getdate(), convert(varchar, getdate(), 113)
+
+Create View V_borrower1 as Select userid, firstname, lastname, address, contact, email from borrower
+
+Select * from V_borrower1
+
+Insert into V_borrower1 values('202', 'Shobhit', 'Kimothi', 'New Delhi, Delhi','9999044489', 'shobhit@gmail.com')
+
+Update V_borrower1 Set address = 'Chandigarh, Punjab' where userid = '202'
+
+Select * from V_borrower1
+
+Select * from borrower
